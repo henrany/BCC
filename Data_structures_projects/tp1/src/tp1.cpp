@@ -68,7 +68,7 @@ void Rick::insert_container(int container){
 }
 
 //function where the insertion of the manipulated values are stored
-//time complexity of O(n)
+//time complexity of O(1)
 void Rick::insert_new_container(int container, int count){
   Node *temp = new Node();
   //getting the new container
@@ -126,7 +126,7 @@ void Rick::remove_container(int container){
 
    //time complexity of O(n^2)
   int Rick::operations(int container){
-    //operation to get the alreadu created list
+    //operation to get the already created list
     Node *opera = new Node();
     opera = get_head();
     //variable for the manipulation of the list
@@ -135,7 +135,7 @@ void Rick::remove_container(int container){
     //create a new list
     Rick measure = Rick();
     //insert nodes into the list
-    //this list take 0 as the initial element of the list
+    //this list takes 0 as the initial elements
     measure.insert_new_container(0,0);
     //new node to get the head of the new created list
     Node *measure_node = measure.get_head();
@@ -159,7 +159,6 @@ void Rick::remove_container(int container){
         if(sum == container || sub == container){
           //print out the minimum operation
           std::cout<<cnt + 1<<std::endl;
-          //delete [] measure;
           return cnt + 1;
         }
         // next of the head
