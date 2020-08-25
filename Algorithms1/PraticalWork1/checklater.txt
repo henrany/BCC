@@ -1,0 +1,49 @@
+//to check later
+//     if(currentRow == nRow - 1 && currentCol == nCol - 1){
+    //         std::cout<<0<<"\n";
+    //         return count;
+    //     }
+
+    //     //below current cell
+    //     if(isValidMovement(currentRow+currentElementNumber, currentCol) && visited[currentRow+currentElementNumber][currentCol] == false){
+    //         qbR.push(currentPosNum+currentElementNumber);
+    //         qbC.push(currentCol);
+    //         //update the visited area
+    //         visited[currentRow+currentElementNumber][currentCol] = 1;
+    //         minDistance[currentRow+currentElementNumber][currentCol] = 
+    //           std::min(minDistance[currentRow+currentElementNumber][currentCol],minDistance[currentRow][currentCol]+currentElementNumber);
+    //     }
+
+    //     //above current cell
+    //     if(isValidMovement(currentRow - currentElementNumber, currentCol) && visited[currentRow-currentElementNumber][currentCol] == false){
+    //         qbR.push(currentPosNum-currentElementNumber);
+    //         qbC.push(currentCol);
+    //         //update the visited area
+    //         visited[currentRow-currentElementNumber][currentCol] = 1;
+    //         minDistance[currentRow-currentElementNumber][currentCol] = 
+    //           std::min(minDistance[currentRow+currentElementNumber][currentCol],minDistance[currentRow][currentCol]+currentElementNumber);
+    //     }
+
+    //     //right cell 
+    //     if(isValidMovement(currentRow, currentCol+currentElementNumber) && visited[currentRow][currentCol+currentElementNumber] == false){
+    //         qbR.push(currentPosNum);
+    //         qbC.push(currentCol+currentElementNumber);
+    //         //update the visited area
+    //         visited[currentRow][currentCol+currentElementNumber] = 1;
+    //         minDistance[currentRow][currentCol+currentElementNumber] = 
+    //           std::min(minDistance[currentRow][currentCol+currentElementNumber],minDistance[currentRow][currentCol]+currentElementNumber);
+    //     }
+
+    //     if(isValidMovement(currentRow, currentCol-currentElementNumber) && visited[currentRow][currentCol-currentElementNumber] == false){
+    //         qbR.push(currentPosNum);
+    //         qbC.push(currentCol-currentElementNumber);
+    //         //update the visited area
+    //         visited[currentRow][currentCol-currentElementNumber] = 1;
+    //         minDistance[currentRow][currentCol-currentElementNumber] = 
+    //           std::min(minDistance[currentRow][currentCol-currentElementNumber],minDistance[currentRow][currentCol]+currentElementNumber);
+    //     }
+    //     //pop the visited cell
+    //     qbR.pop();
+    //     qbC.pop();
+    // }
+        //left cell
