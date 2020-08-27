@@ -89,7 +89,7 @@ void Graph::bfs(int nRow, int nCol){
         qbR.push(startRow);
         qbC.push(endCol);
          //get a counter for the all vertices visited
-         double max = 0, cu=0;
+         double max = 0, cu=0,max1 = 0;
          //starting of bfs for the minimum distance
         while (!qbR.empty() || !qbC.empty()){
             //getting the first node of the queues
@@ -155,25 +155,33 @@ void Graph::getWinner(){
     //sort all the players to get the minimum jumps in the first index
     //time complexity of O(nlogn)
     std::sort(players.begin(),players.end());
-
+    //Remove all losers from the players list
+    //time complexity of O(n);
+    for(int i=numOfPlayers-1;~i;i--){
+        if(players[i].first != players[0].first){
+            players.pop_back();
+        }
+    }
     //in case of a draw
     //sort the max move since the one who reches first may have the least moves
     //time complexity O(nlogn)
     if(players[0].first == players[1].first){
         std::sort(players.begin(),players.end(),sortSecond);
+        //remove players with the same max moves 
+        //time complexity of O(n)
+         for(int i=players.size()-1;~i;i--){
+            if(players[i].second.first != players[0].second.first){
+            players.pop_back();
+            }
+        }
     }
 
-    //Remove all losers from the players list
-    //time complexity of O(n);
-    // for(int i=numOfPlayers-1;~i;i--){
-    //     if(players[i].first != players[0].first){
-    //         players.pop_back();
-    //     }
-    // }
+
     //@Debug
     // for(int i=0;i<players.size();i++){
     //     std::cout<<players[i].first<<" "<<players[i].second.first<<" "<<players[i].second.second<<"\n";
     // }
+
     //when there is no winner, the counter will be zero
     if(counter<=0){
         std::cout<<"SEM VENCEDORES\n";
@@ -182,8 +190,8 @@ void Graph::getWinner(){
         //what if the max moves is also an impact?
         //think of this one since it can give a very bad output?
         //it should get the last element since it the element closer to reaching first.
-        std::cout<<players[0].second.second<<"\n";
-        std::cout<<players[0].first<<"\n";
+        std::cout<<players[players.size()-1].second.second<<"\n";
+        std::cout<<players[players.size()-1].first<<"\n";
     }
 }
 

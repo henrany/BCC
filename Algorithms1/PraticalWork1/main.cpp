@@ -30,7 +30,7 @@ int main(int argc, char *argv[]){
         auto t2 = std::chrono::high_resolution_clock::now();
         
         auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
-        //std::cout<<duration<<"\n";
+        std::cout<<duration<<"\n";
         file.close();
     }
     return 0;
