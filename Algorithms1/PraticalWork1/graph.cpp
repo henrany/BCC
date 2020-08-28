@@ -13,13 +13,6 @@ Graph::Graph(int nRow, int nCol, int numOfPlayers){
     this->numOfPlayers = numOfPlayers;
     this->counter = 0;
 
-    position = new int *[nRow];
-    for (int i = 0; i < nRow; i++){
-        position[i] = new int[nCol];
-        for (int j = 0; j < nCol; j++){
-            position[i][j] = 0;
-        }
-    }
     getMatrix = new int *[nRow];
     for (int i = 0; i < nRow; i++){
         getMatrix[i] = new int[nCol];
@@ -27,10 +20,9 @@ Graph::Graph(int nRow, int nCol, int numOfPlayers){
             getMatrix[i][j] = 0;
         }
     }
-
     //initializing the vector with null values
     for (int i = 0; i < numOfPlayers; i++){
-        players.push_back(std::make_pair(-1, std::make_pair(0, 'A' + i)));
+        players.push_back(std::make_pair(1000000000, std::make_pair(0, 'A' + i)));
     }
 }
 
@@ -38,37 +30,12 @@ void Graph::addtoMatrix(int i, int j, int num){
     getMatrix[i][j] = num;
 }
 
-void Graph::addPlayers(int row, int col){
-    position[row][col] = 1;
-}
-
 bool Graph::sortSecond(const std::pair<int,std::pair<double,char>> &a,const std::pair<int,std::pair<double,char>> &b){ 
     return (a.second.first < b.second.first);
 }
 
-void Graph::bfs(int nRow, int nCol){
-    //do a bfs for all the players
-    //O(n^2)
-    for (int i = 0; i < numOfPlayers; i++){
-        //values for start rows and columns
-        int startRow = 0, endCol = 0;
-        //getting the start row and end column
-        for(int i=0;i<nRow;i++){
-            bool broke = false;
-            for(int j=0;j<nCol;j++){
-                if(position[i][j] > 0){
-                    position[i][j] = 0;
-                    startRow = i;
-                    endCol = j;
-                    broke = true;
-                    break;
-                }
-            }
-            if(broke){
-                break;
-            }
-        }
-        //values for checking the number of layer and paths taken
+void Graph::bfs(int startRow, int endCol, int i){
+     //values for checking the number of layer and paths taken
         int count = 0, nodesLeftInLayer = 1, nodesInNextLayer = 0;
         //keeping track of every visited nodes
         bool **visited;
@@ -148,7 +115,6 @@ void Graph::bfs(int nRow, int nCol){
         }
         //freeing the allocated memory 
         delete[] visited; 
-    }
 }
 
 void Graph::getWinner(){
@@ -163,7 +129,7 @@ void Graph::getWinner(){
         }
     }
     //in case of a draw
-    //sort the max move since the one who reches first may have the least moves
+    //sort the max move since the one who reaches first may have the least moves
     //time complexity O(nlogn)
     if(players[0].first == players[1].first){
         std::sort(players.begin(),players.end(),sortSecond);
@@ -188,7 +154,6 @@ void Graph::getWinner(){
     }
     else{
         //what if the max moves is also an impact?
-        //think of this one since it can give a very bad output?
         //it should get the last element since it the element closer to reaching first.
         std::cout<<players[players.size()-1].second.second<<"\n";
         std::cout<<players[players.size()-1].first<<"\n";
@@ -198,6 +163,5 @@ void Graph::getWinner(){
 Graph::~Graph(){
     //delete[] adjacencyMatrix;
     delete[] getMatrix;
-    delete[] position;
     players.clear();
 }

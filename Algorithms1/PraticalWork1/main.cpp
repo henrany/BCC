@@ -18,20 +18,21 @@ int main(int argc, char *argv[]){
             }
         }
         int nr=0,nc=0;
+        auto t1 = std::chrono::high_resolution_clock::now();
         for(int i=0;i<players;i++){
             file>>nr>>nc;
-            graph.addPlayers(nr,nc);
+            graph.bfs(nr,nc,i);
         }
-        std::string show;
-        show = "S";
-        auto t1 = std::chrono::high_resolution_clock::now();
-        graph.bfs(rows,col);
+        // graph.bfs(rows,col);
         graph.getWinner();
         auto t2 = std::chrono::high_resolution_clock::now();
-        
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>( t2 - t1 ).count();
+        //Execution time of the program
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(t2 - t1 ).count();
         std::cout<<duration<<"\n";
         file.close();
+    }
+    else{
+        std::cout<<"No file to be processed now\n";
     }
     return 0;
 }
