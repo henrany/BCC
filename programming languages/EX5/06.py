@@ -34,7 +34,7 @@ class CallbackOdd(CallbackBase):
 # in python 3, the linearity of inheritance must be obeyed 
 # because it was giving erros when CallbackBase was called first 
 
-class CallbackMult(CallbackOdd, CallbackBase):
+class CallbackMult(CallbackOdd,CallbackBase):
     def __str__(self):
         return "multiple callback"
 # the comportment of object visiter on CallbackMult on integers will be of first 
@@ -43,4 +43,5 @@ class CallbackMult(CallbackOdd, CallbackBase):
     
 
 # v = Visitor(CallbackMult())
+# print(v)
 # print(v.visit([0,1,2,3]))

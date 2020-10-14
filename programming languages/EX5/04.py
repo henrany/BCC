@@ -25,28 +25,17 @@ class  List:
                 ans = ans + ", "
         ans = ans + "]"
         return  ans
-
-    def length(self):
-        ans = 0
-        cell = self.start
-        while cell != 0:
-            ans = ans + 1
-            cell = cell.tail
-        return ans
     
     def concat(self,n):
         cell = self.start
-        l = []
         while cell != 0:
-            l.append(cell.head)
+            n = n.cons(cell.head)
             cell = cell.tail
-        l.reverse()
-        return l
+        return n
 
 
 
 def  test():
-
     a = List(0)
     b = a.cons(2)
     c = b.cons("Hi")
