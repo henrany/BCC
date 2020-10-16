@@ -57,6 +57,8 @@ int Diamonds::dynamicApproach(int n){
 
 			// include the element in the array 
 			if (diaArray[i - 1] <= j) {
+				//this is done by using bitwise or
+				//since the array is of boolean values 
 				lookUp[i][j] |= lookUp[i - 1][j - diaArray[i - 1]];
 			}
 		}
