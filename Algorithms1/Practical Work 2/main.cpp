@@ -15,7 +15,6 @@ int main(int argc, char *argv[]){
             diamonds.addToVector(i,value);
         }
         auto t1 = std::chrono::high_resolution_clock::now();
-        //diamonds.mergeSort(0,n-1);
         diamonds.print(n);
         auto t2 = std::chrono::high_resolution_clock::now();
         //Execution time of the program

@@ -4,15 +4,15 @@
 
 class Diamonds{
     private:
-    int number;
-    int *diaArray;
+        int number;
+        int *diaArray;
     public:
-    Diamonds(int);
-    void addToVector(int,int);
-    int BruteForce(int n,int,int);
-    int dynamicApproach(int n);
-    void print(int);
-    ~Diamonds();
+        Diamonds(int);
+        void addToVector(int,int);
+        int BruteForce(int n,int,int);
+        int dynamicApproach(int n);
+        void print(int);
+        ~Diamonds();
 };
 
 #endif //TP2_HPP
