@@ -1,2 +1,2 @@
 all:
-   g++ -std=c++11 new.cpp -o tp1
+   g++ -std=c++11 *.cpp -o tp1
