@@ -83,7 +83,7 @@ int main(int argc, char **argv) {
         char yCord[12] = {0};
         int index= 0;
         if(buf[0] != 'l'){
-            for(int i=0; i<sizeof(buf)-32; i++){
+            for(int i=0; i<sizeof(buf)- 1; i++){
             if(buf[i] == ' '){
                 index++;
                 continue;
