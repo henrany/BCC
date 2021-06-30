@@ -79,8 +79,10 @@ int main(int argc, char **argv) {
         char buf[BUFSZ];
         char auxBuf[BUFSZ];
         int incrementer = 0;
+        int breakFromLoop = 0;
         while (1) {
             // set the buffer data to 0
+            if(breakFromLoop) break;
             memset(buf, 0, BUFSZ);
             memset(auxBuf,0, BUFSZ);
             size_t count = 0;
@@ -103,6 +105,7 @@ int main(int argc, char **argv) {
             // Validating the size of the string.
             if (strlen(buf) > 500) {
                 close(csock);
+                breakFromLoop = 1;
             }
             // iterate throuth the message
             /// close the client when there's an invalid character in the message
@@ -119,6 +122,7 @@ int main(int argc, char **argv) {
                     (buf[i] < 0 && buf[i] > 9) && buf[i] != ' ' &&
                     buf[i] != '\n') {
                     close(csock);
+                    breakFromLoop = 1;
                 }
 
                 if (buf[i] == '\n') {
@@ -141,6 +145,7 @@ int main(int argc, char **argv) {
                         query(vec, xCord, yCord, incrementer, csock, count);
                     } else if (buf[currentPosition] == 'k') {
                         close(csock);
+                        breakFromLoop = 1;
                     }
                     index = 0;
                     memset(xCord, 0, 6);
