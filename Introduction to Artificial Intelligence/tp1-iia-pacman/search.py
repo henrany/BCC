@@ -283,13 +283,13 @@ def foodHeuristic(state, problem):
     "*** YOUR CODE HERE ***"
     thisList = foodGrid.asList()
     thisList = thisList[::-1]
-    dx = 0
-    dy = 0
-    walls = problem.walls.asList()
+    manhattan = util.manhattanDistance
+    maxDistance =  0
     if len(thisList) != 0:
-        dx = abs(position[0] - thisList[0][0])
-        dy = abs(position[1] - thisList[0][1])
-    return dx + dy
+        for food in thisList: 
+            dist = manhattan(position, food)
+            if dist > maxDistance: maxDistance = dist
+    return  maxDistance
 
 
 # Abbreviations
