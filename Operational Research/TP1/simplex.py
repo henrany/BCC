@@ -11,8 +11,12 @@ class SimplexMethod:
         self.numOfVar = numOfVar
         self.restrictionNo = restrictionNo
         self.certtificattTable = []
+        self.optimalValuesSet = set()
+        self.auxCertificateRow = set()
+        self.saveOriginalCostFunction = []
         self.optimalValues = []
         self.cost = 0
+        self.useAuxillarySimplex = False
         self.rowValues = ()
         self.colValues = ()
         self.answer = ()
@@ -41,9 +45,6 @@ class SimplexMethod:
     def setAnswer(self, value):
         self.answer = value
 
-    def getAnswer(self):
-        return self.answer
-
     def setCost(self, value):
         self.cost = value
 
@@ -52,26 +53,37 @@ class SimplexMethod:
         table = self.getTable()
         restrictionNo = self.getRestrictionNum()
         numOfVar = self.getNumOfVar()
-        for i in range((restrictionNo+2)):
+        for i in range((restrictionNo+1)):
             vec = []
             for j in range(restrictionNo+numOfVar+1):
                 vec.append(0)
             table.append(vec)
+
+        for i in range(numOfVar+restrictionNo+1):
+            self.saveOriginalCostFunction.append(0)
         
         for i in range(numOfVar):
             self.optimalValues.append(0)
 
-        for i in range(restrictionNo+1):
-            vec = []
-            for j in range(restrictionNo):
-                vec.append(0)
-            self.certtificattTable.append(vec)
+        if restrictionNo >= numOfVar:
+            for i in range(restrictionNo+1):
+                vec = []
+                for j in range(restrictionNo):
+                    vec.append(0)
+                self.certtificattTable.append(vec)
+        else:
+            for i in range(numOfVar):
+                vec = []
+                for j in  range(restrictionNo):
+                    vec.append(0)
+                self.certtificattTable.append(vec)
         return table
 
     # change the cost function
     def fillCostList(self,j:int, value:int):
         table = self.getTable()
         table[0][j] = value * -1
+        self.saveOriginalCostFunction[j] = table[0][j]
         return table
 
     # fill the restrictions column
@@ -79,11 +91,11 @@ class SimplexMethod:
         table = self.getTable()
         resNo = self.getRestrictionNum()
         numVar = self.getNumOfVar()   
-        if i < numVar:
-            self.optimalValues[i] = value 
         if j == numVar:
             table[i+1][numVar+resNo] = value
             if value < 0:
+                self.useAuxillarySimplex = True
+                self.auxCertificateRow.add(i)
                 for j in range(len(table[i+1])):
                     table[i+1][j] = table[i+1][j] * -1
                 table[i+1][i+numVar] = -1
@@ -108,6 +120,28 @@ class SimplexMethod:
         for i in range(restrictionNo+1):
             if i == 0: continue
             self.certtificattTable[i][i-1] = 1
+        
+    def FormAuxilliarySimplex(self):
+        table = self.getTable()
+        numOfVar = self.getNumOfVar()
+        restrictionNo = self.getRestrictionNum()
+        for i in range(restrictionNo+numOfVar+1):
+            if i < numOfVar or i == numOfVar+restrictionNo:
+                table[0][i] = 0
+            else:
+                table[0][i]  = 1
+
+        for value in self.auxCertificateRow:
+            for i in  range(len(self.certtificattTable[value])):
+                self.certtificattTable[value+1][i] = self.certtificattTable[value+1][i] * -1
+
+        for i in range(len(table)):
+            if i == 0: continue
+            for  j in range(len(table[i])):
+                table[0][j] -= table[i][j]
+                if j < restrictionNo:
+                    self.certtificattTable[0][j] -= self.certtificattTable[i][j]
+        self.setCost(table[0][restrictionNo+numOfVar])
 
     def getPivotColumn(self):
         restrictionNo = self.getRestrictionNum()
@@ -115,7 +149,7 @@ class SimplexMethod:
         table = self.getTable()
         minCol = 0
         minValue = 101
-        for j in range(restrictionNo+numOfVar+1):
+        for j in range(restrictionNo+numOfVar):
             if table[0][j] < minValue and table[0][j] != 0:
                 minCol = j
                 minValue = table[0][j]
@@ -181,26 +215,41 @@ class SimplexMethod:
                 if j < restrictionNo:
                     self.certtificattTable[i][j] = self.certtificattTable[i][j] - (self.certtificattTable[rowValues[0]][j] * subtractionValues[i])
                 table[i][j] = table[i][j] - (table[rowValues[0]][j] * subtractionValues[i])
-        if colValues[0] < numOfVar:
-            self.optimalValues[colValues[0]] = table[rowValues[0]][restrictionNo+numOfVar]
+            self.optimalValuesSet.add((rowValues[0], colValues[0]))
         self.setCost(table[0][numOfVar+restrictionNo])
 
     def simplex(self):
         self.FromTableau()
-        while True:
-            pivotCol = self.getPivotColumn()
-            pivotRow = self.getPivotRow()
-            if pivotCol[1] > 0:
-                if self.cost < 0:
-                    self.setAnswer(("inviavel", self.certtificattTable[0]))
-                else:
-                    print(self.table)
-                    self.setAnswer(("otima", self.cost, self.optimalValues, self.certtificattTable[0]))
-                break
-            elif pivotCol[1] < 0 and pivotRow[1] == 101:
-                self.setAnswer(("ilimitada", self.optimalValues,))
-                break
-            self.performNormalSimplex()
+        if self.useAuxillarySimplex:
+            self.FormAuxilliarySimplex()
+            while True:
+                pivotCol = self.getPivotColumn()
+                if pivotCol[1] > 0:
+                    if self.cost < 0:
+                        self.setAnswer(("inviavel", self.certtificattTable[0]))
+                        break
+                    elif self.cost == 0:
+                        self.table[0] = self.saveOriginalCostFunction
+                        while True:
+                            pivotCol = self.getPivotColumn()
+        else:
+            while True:
+                pivotCol = self.getPivotColumn()
+                pivotRow = self.getPivotRow()
+                if pivotCol[1] > 0:
+                    if self.cost < 0:
+                        self.setAnswer(("inviavel", self.certtificattTable[0]))
+                        break
+                    else:
+                        for value in self.optimalValuesSet:
+                            if value[1] >= self.numOfVar: continue
+                            self.optimalValues[value[1]] = self.table[value[0]][self.numOfVar + self.restrictionNo]
+                        self.setAnswer(("otima", self.cost, self.optimalValues, self.certtificattTable[0]))
+                    break
+                elif pivotCol[1] < 0 and pivotRow[1] == 101:
+                    self.setAnswer(("ilimitada", self.optimalValues,))
+                    break
+                self.performNormalSimplex()
 
     def run(self):
         self.simplex()
